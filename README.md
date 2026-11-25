@@ -1,23 +1,36 @@
 # 😈 INIMIGOS SECRETO INFINITOS
 
-App 100% nativo para **Vercel** (Static Edge CDN + Vercel Serverless Functions + **Neon Serverless Postgres**).
+App de **Inimigo Secreto** construído com **Next.js (App Router) + PostgreSQL**, pronto para rodar com **1 comando no Docker Desktop** e fazer **deploy zero-config na Vercel** via GitHub.
 
-## Tecnologias Vercel utilizadas
+## Rodar no Docker Desktop
 
-- **Frontend estático (`public/`):** servido direto pela Edge CDN da Vercel (`outputDirectory: "public"`).
-- **Backend (`api/`):** 6 Vercel Serverless Functions nativas (`health`, `public-info`, `participant`, `admin-auth`, `admin-data`, `admin-draw`).
-- **Banco de dados (`lib/neon.js`):** `@neondatabase/serverless` (driver HTTP oficial da integração Neon Postgres no Vercel Storage), com criação automática das tabelas e transações atômicas (`sql.transaction`).
+Com o Docker Desktop aberto, execute na pasta do projeto:
 
-## Como subir na Vercel
+```bash
+docker compose up --build
+```
 
-1. Importe este repositório em [vercel.com/new](https://vercel.com/new) (Framework Preset: **Other**, sem alterar build command).
-2. No projeto na Vercel, vá em **Storage** -> **Create Database** -> **Neon (Serverless Postgres)** (gratuito) -> **Connect to Project**.
-3. Faça um **Redeploy** na aba **Deployments**.
-4. Teste `https://SEU-DOMINIO.vercel.app/api/health` (deve retornar `{"ok": true}`).
+Isso sobe automaticamente:
+- **PostgreSQL 16** (`db`, porta `5432`, volume persistente `pgdata`)
+- **App Next.js** (`web`, porta `3000`)
 
-## Acesso
-
-- **Site principal:** `/` (telefone com DDD `(xx) x xxxx xxxx` + criação de senha pessoal)
-- **Painel Admin:** `/admin`
+Acesse no navegador:
+- **Site principal:** http://localhost:3000
+- **Painel Admin:** http://localhost:3000/admin
   - **Login:** `infinitos`
   - **Senha:** `senhadificil123`
+
+Para parar os containers:
+
+```bash
+docker compose down
+```
+
+## Deploy na Vercel (via GitHub)
+
+A Vercel detecta **Next.js** automaticamente — não precisa configurar Build Command nem `vercel.json`:
+
+1. Importe o repositório na Vercel (em **Settings -> Build and Deployment -> Framework Preset**, selecione **Next.js** se já existia o projeto antigo como "Other").
+2. No projeto na Vercel, vá em **Storage -> Create Database -> Neon (Serverless Postgres)** (gratuito) e conecte ao projeto (`DATABASE_URL` / `POSTGRES_URL` é preenchida automaticamente).
+3. Faça **Redeploy** na aba **Deployments**.
+4. Valide `https://SEU-DOMINIO.vercel.app/api/health` (deve retornar `{"ok": true}`).

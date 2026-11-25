@@ -1,12 +1,19 @@
 {
   "name": "inimigos-secreto-infinitos",
-  "version": "2.0.0",
-  "description": "INIMIGOS SECRETO INFINITOS — App 100% Vercel Serverless + Neon Postgres.",
+  "version": "3.0.0",
+  "private": true,
+  "description": "INIMIGOS SECRETO INFINITOS — Next.js + PostgreSQL + Docker Desktop + Vercel.",
   "scripts": {
-    "test": "node test/verify-vercel.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test:e2e": "node test/verify-e2e.js"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.0"
+    "next": "^15.2.4",
+    "pg": "^8.13.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "engines": {
     "node": "22.x"

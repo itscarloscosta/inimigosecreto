@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: inimigos-secreto-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-inimigo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-inimigo123}
+      POSTGRES_DB: ${POSTGRES_DB:-inimigosecreto}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-inimigo} -d ${POSTGRES_DB:-inimigosecreto}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: inimigos-secreto-web
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-inimigo}:${POSTGRES_PASSWORD:-inimigo123}@db:5432/${POSTGRES_DB:-inimigosecreto}
+      ADMIN_USER: ${ADMIN_USER:-infinitos}
+      ADMIN_PASS: ${ADMIN_PASS:-senhadificil123}
+
+volumes:
+  pgdata:
