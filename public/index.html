@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INIMIGOS SECRETO INFINITOS — Descubra quem você vai trollar</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>😈</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a href="/" class="brand">
+      <span class="brand-badge" aria-hidden="true">😈</span>
+      <span id="brandTitle">INIMIGOS SECRETO INFINITOS</span>
+    </a>
+    <nav class="nav-actions" aria-label="Navegação principal">
+      <a href="/admin" class="nav-link">Painel Admin</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-eyebrow">🎁 Presentes duvidosos &bull; Sigilo total</div>
+      <h1 id="heroTitle">INIMIGOS SECRETO <span class="accent">INFINITOS</span></h1>
+      <p class="hero-subtitle" id="heroSubtitle">
+        Esqueça o amigo secreto bonzinho. Aqui vale dar pente pra careca, camisa do time rival e qualquer presente hilário que a pessoa jamais pediu!
+      </p>
+      <div class="status-strip" id="statusStrip">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Carregando status do sorteio...</span>
+      </div>
+    </section>
+
+    <!-- STEP 1: PHONE ENTRY -->
+    <section class="card" id="viewPhone">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Acesse com seu telefone</h2>
+          <p class="card-subtitle">Digite o número com DDD que o organizador cadastrou no grupo.</p>
+        </div>
+      </div>
+
+      <form id="phoneForm" class="form-stack" novalidate>
+        <div class="field">
+          <label for="phoneInput">Seu telefone com DDD</label>
+          <input
+            id="phoneInput"
+            name="phone"
+            type="tel"
+            class="input input-mono"
+            placeholder="(11) 9 9999 9999"
+            autocomplete="tel-national"
+            required
+          />
+          <span class="field-hint">Formato obrigatório: (xx) x xxxx xxxx</span>
+        </div>
+
+        <div id="phoneError" class="alert alert-error hidden" role="alert"></div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="phoneSubmitBtn">
+          Continuar &rarr;
+        </button>
+      </form>
+    </section>
+
+    <!-- STEP 2A: FIRST ACCESS - CREATE PERSONAL PASSWORD -->
+    <section class="card hidden" id="viewRegister">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Crie sua senha pessoal 🔒</h2>
+          <p class="card-subtitle" id="registerGreeting">
+            Primeiro acesso! Crie uma senha só sua para ninguém bisbilhotar seu inimigo secreto.
+          </p>
+        </div>
+      </div>
+
+      <div class="alert alert-info" style="margin-bottom: 16px;">
+        <strong>Guarde essa senha!</strong> Ela garante que apenas você consiga abrir seu sorteio usando o telefone <span class="input-mono" id="registerPhoneLabel"></span>.
+      </div>
+
+      <form id="registerForm" class="form-stack" novalidate>
+        <div class="field">
+          <label for="regPassword">Nova senha pessoal</label>
+          <div class="input-wrap">
+            <input
+              id="regPassword"
+              type="password"
+              class="input input-with-toggle"
+              placeholder="Mínimo de 4 caracteres"
+              autocomplete="new-password"
+              minlength="4"
+              required
+            />
+            <button type="button" class="toggle-pass" data-toggle-password="regPassword" aria-label="Mostrar senha">👁️</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="regConfirm">Confirmar senha pessoal</label>
+          <div class="input-wrap">
+            <input
+              id="regConfirm"
+              type="password"
+              class="input input-with-toggle"
+              placeholder="Repita sua senha"
+              autocomplete="new-password"
+              minlength="4"
+              required
+            />
+            <button type="button" class="toggle-pass" data-toggle-password="regConfirm" aria-label="Mostrar senha">👁️</button>
+          </div>
+        </div>
+
+        <div id="registerError" class="alert alert-error hidden" role="alert"></div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="registerSubmitBtn">
+          Salvar senha e entrar 😈
+        </button>
+
+        <div style="text-align: center;">
+          <button type="button" class="btn-link" data-back-phone>← Usar outro telefone</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- STEP 2B: RETURNING ACCESS - LOGIN WITH PERSONAL PASSWORD -->
+    <section class="card hidden" id="viewLogin">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Digite sua senha pessoal 🔑</h2>
+          <p class="card-subtitle" id="loginGreeting">Bem-vindo de volta!</p>
+        </div>
+      </div>
+
+      <form id="loginForm" class="form-stack" novalidate>
+        <div class="field">
+          <label for="loginPassword">Sua senha pessoal</label>
+          <div class="input-wrap">
+            <input
+              id="loginPassword"
+              type="password"
+              class="input input-with-toggle"
+              placeholder="Digite a senha que você criou"
+              autocomplete="current-password"
+              required
+            />
+            <button type="button" class="toggle-pass" data-toggle-password="loginPassword" aria-label="Mostrar senha">👁️</button>
+          </div>
+        </div>
+
+        <div id="loginError" class="alert alert-error hidden" role="alert"></div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="loginSubmitBtn">
+          Entrar e ver meu sorteio &rarr;
+        </button>
+
+        <div style="text-align: center;">
+          <button type="button" class="btn-link" data-back-phone>← Trocar telefone</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- STEP 3: AUTHENTICATED PARTICIPANT DASHBOARD -->
+    <section class="hidden" id="viewDashboard">
+      <div class="user-banner">
+        <div>
+          <div class="user-banner-name" id="dashUserName">Participante</div>
+          <div class="user-banner-phone" id="dashUserPhone"></div>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" id="logoutBtn">Sair</button>
+      </div>
+
+      <!-- WAITING FOR DRAW -->
+      <div class="card hidden" id="dashWaitingCard">
+        <div style="text-align: center; padding: 12px 4px;">
+          <div style="font-size: 3rem; margin-bottom: 10px;">⏳</div>
+          <h2 class="card-title">O sorteio ainda não aconteceu!</h2>
+          <p class="card-subtitle" style="margin: 10px auto 20px; max-width: 40ch;">
+            Sua senha pessoal já está protegida e garantida. Assim que o organizador apertar o botão do sorteio no painel admin, seu Inimigo Secreto aparecerá aqui.
+          </p>
+          <button type="button" class="btn btn-secondary" id="refreshStatusBtn">
+            🔄 Verificar novamente
+          </button>
+        </div>
+      </div>
+
+      <!-- READY TO REVEAL / REVEALED -->
+      <div class="card hidden" id="dashRevealCard">
+        <div class="reveal-stage" id="revealStage">
+          <!-- Hidden state -->
+          <div id="revealLocked">
+            <div class="reveal-icon">🎁</div>
+            <div class="reveal-label">Sigilo máximo ativado</div>
+            <h2 class="card-title" style="margin-bottom: 8px;">Seu Inimigo Secreto está pronto!</h2>
+            <p class="reveal-note">
+              Confira se não tem nenhum curioso olhando para sua tela antes de abrir o envelope.
+            </p>
+            <button type="button" class="btn btn-pink" id="revealBtn">
+              😈 Revelar meu Inimigo Secreto
+            </button>
+          </div>
+
+          <!-- Revealed state -->
+          <div id="revealOpened" class="hidden">
+            <div class="reveal-icon">😈</div>
+            <div class="reveal-label">Você vai presentear</div>
+            <div class="enemy-name" id="enemyNameText"></div>
+            <p class="reveal-note">
+              Ninguém sabe que você tirou essa pessoa — e ninguém mais tirou ela. Capricha na zoeira!
+            </p>
+            <button type="button" class="btn btn-secondary btn-sm" id="hideEnemyBtn">
+              🙈 Esconder nome da tela
+            </button>
+          </div>
+        </div>
+
+        <!-- Bad Gift Idea Generator -->
+        <div class="gift-idea-box">
+          <div class="gift-idea-header">
+            <span style="font-weight: 700; font-size: 0.9rem;">💡 Sem ideia de presente ruim?</span>
+            <span class="gift-idea-tag" id="ideaCategory">Clássico da zoeira</span>
+          </div>
+          <div class="gift-idea-text" id="ideaTitle">Pente de bolso chique pra quem é careca</div>
+          <p class="gift-idea-why" id="ideaWhy">Inútil na prática, inesquecível na foto do grupo.</p>
+          <button type="button" class="btn btn-secondary btn-sm" id="nextIdeaBtn">
+            🎲 Sortear outra ideia malvada
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    INIMIGOS SECRETO INFINITOS &bull; Cada participante vê apenas o próprio sorteio.
+  </footer>
+
+  <script src="/shared.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
