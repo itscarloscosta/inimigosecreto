@@ -395,8 +395,11 @@
     try {
       const info = await api('/api/public-info');
       applyPublicInfo(info);
-    } catch {
-      statusText.textContent = 'Online';
+    } catch (err) {
+      statusText.textContent =
+        err.status === 503
+          ? 'Banco de dados ainda não conectado na Vercel'
+          : 'Online';
     }
 
     try {

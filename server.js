@@ -159,13 +159,25 @@ function createRequestHandler(store, options = {}) {
 
   return async function requestHandler(req, res) {
     const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-    const pathname = urlObj.pathname;
+    let pathname = urlObj.pathname;
+    if (
+      (pathname === '/api/index' || pathname === '/api/index.js') &&
+      urlObj.searchParams.has('__path')
+    ) {
+      pathname = '/api/' + urlObj.searchParams.get('__path').replace(/^\/+/, '');
+    }
     const method = req.method.toUpperCase();
     const forwardedFor = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
     const clientIp = forwardedFor || (req.socket && req.socket.remoteAddress) || 'local';
     const secureCookie = isHttpsRequest(req);
 
     try {
+      // ================== HEALTH CHECK ==================
+      if (method === 'GET' && pathname === '/api/health') {
+        await store.getEventInfo();
+        return sendJson(res, 200, { ok: true, node: process.version });
+      }
+
       // ================== PUBLIC INFO ==================
       if (method === 'GET' && pathname === '/api/public-info') {
         const info = await store.getEventInfo();

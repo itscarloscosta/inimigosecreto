@@ -2,13 +2,12 @@
   "name": "inimigos-secreto-infinitos",
   "version": "1.0.0",
   "description": "INIMIGOS SECRETO INFINITOS — App de Inimigo Secreto com painel administrativo e sorteio sigiloso garantido.",
-  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "test": "node test/verify.js"
   },
   "dependencies": {
-    "pg": "^8.16.0"
+    "pg": "^8.13.0"
   },
   "engines": {
     "node": "22.x"
