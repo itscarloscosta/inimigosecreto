@@ -1,13 +1,12 @@
 {
   "name": "inimigos-secreto-infinitos",
-  "version": "1.0.0",
-  "description": "INIMIGOS SECRETO INFINITOS — App de Inimigo Secreto com painel administrativo e sorteio sigiloso garantido.",
+  "version": "2.0.0",
+  "description": "INIMIGOS SECRETO INFINITOS — App 100% Vercel Serverless + Neon Postgres.",
   "scripts": {
-    "start": "node server.js",
-    "test": "node test/verify.js"
+    "test": "node test/verify-vercel.js"
   },
   "dependencies": {
-    "pg": "^8.13.0"
+    "@neondatabase/serverless": "^1.0.0"
   },
   "engines": {
     "node": "22.x"

@@ -216,7 +216,7 @@
   }
 
   async function loadDashboard() {
-    const data = await api('/api/admin/dashboard');
+    const data = await api('/api/admin-data');
     dashboardState = data;
     showAuth(true);
     renderDashboard();
@@ -230,7 +230,7 @@
     adminLoginBtn.disabled = true;
     adminLoginBtn.textContent = 'Verificando...';
     try {
-      await api('/api/admin/login', {
+      await api('/api/admin-auth', {
         method: 'POST',
         body: {
           login: adminLoginInput.value,
@@ -250,7 +250,7 @@
 
   adminLogoutBtn.addEventListener('click', async () => {
     try {
-      await api('/api/admin/logout', { method: 'POST' });
+      await api('/api/admin-auth', { method: 'DELETE' });
     } catch {
       // ignore
     }
@@ -290,7 +290,7 @@
     addMemberBtn.disabled = true;
     addMemberBtn.textContent = 'Adicionando...';
     try {
-      await api('/api/admin/participants', {
+      await api('/api/admin-data', {
         method: 'POST',
         body: { name, phone },
       });
@@ -322,7 +322,7 @@
       });
       if (!ok) return;
       try {
-        await api(`/api/admin/participants/${id}`, { method: 'DELETE' });
+        await api(`/api/admin-data?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
         toast(`${name} removido do grupo.`);
         await loadDashboard();
       } catch (err) {
@@ -333,7 +333,7 @@
 
     const resetBtn = e.target.closest('[data-reset-pass]');
     if (resetBtn) {
-      const id = resetBtn.getAttribute('data-reset-pass');
+      const id = Number(resetBtn.getAttribute('data-reset-pass'));
       const name = resetBtn.getAttribute('data-member-name');
       const ok = await askConfirm({
         title: `Resetar senha de ${name}?`,
@@ -343,7 +343,7 @@
       });
       if (!ok) return;
       try {
-        await api(`/api/admin/participants/${id}/reset-password`, { method: 'POST' });
+        await api('/api/admin-data', { method: 'PATCH', body: { id } });
         toast(`Senha de ${name} resetada com sucesso.`, 'success');
         await loadDashboard();
       } catch (err) {
@@ -372,7 +372,7 @@
 
     runDrawBtn.disabled = true;
     try {
-      await api('/api/admin/draw', { method: 'POST' });
+      await api('/api/admin-draw', { method: 'POST' });
       toast('Sorteio realizado com sucesso! Que comece o caos 😈', 'success');
       await loadDashboard();
     } catch (err) {
@@ -391,7 +391,7 @@
     if (!ok) return;
 
     try {
-      await api('/api/admin/draw/reset', { method: 'POST' });
+      await api('/api/admin-draw', { method: 'DELETE' });
       toast('Sorteio limpo.');
       await loadDashboard();
     } catch (err) {
@@ -403,7 +403,7 @@
     e.preventDefault();
     saveEventBtn.disabled = true;
     try {
-      await api('/api/admin/event', {
+      await api('/api/admin-data', {
         method: 'PUT',
         body: {
           title: eventTitleInput.value,

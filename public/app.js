@@ -240,9 +240,9 @@
     phoneSubmitBtn.disabled = true;
     phoneSubmitBtn.textContent = 'Verificando...';
     try {
-      const data = await api('/api/participant/check-phone', {
+      const data = await api('/api/participant', {
         method: 'POST',
-        body: { phone: raw },
+        body: { action: 'check-phone', phone: raw },
       });
       currentPhone = data.phoneFormatted;
 
@@ -290,9 +290,9 @@
     registerSubmitBtn.disabled = true;
     registerSubmitBtn.textContent = 'Criando senha...';
     try {
-      const data = await api('/api/participant/register-password', {
+      const data = await api('/api/participant', {
         method: 'POST',
-        body: { phone: currentPhone, password, confirmPassword },
+        body: { action: 'register-password', phone: currentPhone, password, confirmPassword },
       });
       toast('Senha pessoal criada com sucesso! 🔒', 'success');
       renderDashboard(data.profile);
@@ -318,9 +318,9 @@
     loginSubmitBtn.disabled = true;
     loginSubmitBtn.textContent = 'Entrando...';
     try {
-      const data = await api('/api/participant/login', {
+      const data = await api('/api/participant', {
         method: 'POST',
-        body: { phone: currentPhone, password },
+        body: { action: 'login', phone: currentPhone, password },
       });
       renderDashboard(data.profile);
     } catch (err) {
@@ -334,7 +334,10 @@
   revealBtn.addEventListener('click', async () => {
     revealBtn.disabled = true;
     try {
-      const data = await api('/api/participant/reveal', { method: 'POST' });
+      const data = await api('/api/participant', {
+        method: 'POST',
+        body: { action: 'reveal' },
+      });
       enemyNameText.textContent = data.enemy.name;
       revealLocked.classList.add('hidden');
       revealOpened.classList.remove('hidden');
@@ -357,7 +360,7 @@
   refreshStatusBtn.addEventListener('click', async () => {
     refreshStatusBtn.disabled = true;
     try {
-      const data = await api('/api/participant/me');
+      const data = await api('/api/participant');
       renderDashboard(data.profile);
       if (data.profile.event && data.profile.event.drawCompleted) {
         toast('O sorteio foi liberado! 😈', 'success');
@@ -373,7 +376,7 @@
 
   logoutBtn.addEventListener('click', async () => {
     try {
-      await api('/api/participant/logout', { method: 'POST' });
+      await api('/api/participant', { method: 'POST', body: { action: 'logout' } });
     } catch {
       // ignore
     }
@@ -398,12 +401,12 @@
     } catch (err) {
       statusText.textContent =
         err.status === 503
-          ? 'Banco de dados ainda não conectado na Vercel'
+          ? 'Configure o banco Neon Postgres na Vercel'
           : 'Online';
     }
 
     try {
-      const me = await api('/api/participant/me');
+      const me = await api('/api/participant');
       if (me && me.profile) {
         renderDashboard(me.profile);
         return;

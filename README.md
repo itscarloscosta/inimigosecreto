@@ -1,39 +1,23 @@
 # 😈 INIMIGOS SECRETO INFINITOS
 
-App de **Inimigo Secreto** com painel administrativo, cadastro por telefone com DDD `(xx) x xxxx xxxx`, senha pessoal por participante e sorteio sigiloso garantido (ninguém tira a si mesmo, ninguém tira a mesma pessoa e nem o admin vê os pares).
+App 100% nativo para **Vercel** (Static Edge CDN + Vercel Serverless Functions + **Neon Serverless Postgres**).
 
-## Rodar localmente
+## Tecnologias Vercel utilizadas
 
-Requer Node.js 22+ (usa SQLite nativo localmente em `data/inimigo-secreto.db`):
+- **Frontend estático (`public/`):** servido direto pela Edge CDN da Vercel (`outputDirectory: "public"`).
+- **Backend (`api/`):** 6 Vercel Serverless Functions nativas (`health`, `public-info`, `participant`, `admin-auth`, `admin-data`, `admin-draw`).
+- **Banco de dados (`lib/neon.js`):** `@neondatabase/serverless` (driver HTTP oficial da integração Neon Postgres no Vercel Storage), com criação automática das tabelas e transações atômicas (`sql.transaction`).
 
-```bash
-node server.js
-```
+## Como subir na Vercel
 
-- **Site principal:** http://127.0.0.1:3000
-- **Painel Admin:** http://127.0.0.1:3000/admin
+1. Importe este repositório em [vercel.com/new](https://vercel.com/new) (Framework Preset: **Other**, sem alterar build command).
+2. No projeto na Vercel, vá em **Storage** -> **Create Database** -> **Neon (Serverless Postgres)** (gratuito) -> **Connect to Project**.
+3. Faça um **Redeploy** na aba **Deployments**.
+4. Teste `https://SEU-DOMINIO.vercel.app/api/health` (deve retornar `{"ok": true}`).
+
+## Acesso
+
+- **Site principal:** `/` (telefone com DDD `(xx) x xxxx xxxx` + criação de senha pessoal)
+- **Painel Admin:** `/admin`
   - **Login:** `infinitos`
   - **Senha:** `senhadificil123`
-
-Testes automatizados:
-
-```bash
-node test/verify.js
-```
-
-## Deploy na Vercel (com banco PostgreSQL grátis)
-
-A Vercel usa funções serverless (sem disco persistente local), então em produção o app conecta automaticamente em um banco **PostgreSQL** via variável `DATABASE_URL` ou `POSTGRES_URL` (e cria todas as tabelas sozinho na primeira requisição).
-
-1. Suba este repositório para o **GitHub**.
-2. Acesse [vercel.com/new](https://vercel.com/new) e importe o repositório `inimigos-secreto-infinitos`.
-3. Clique em **Deploy**.
-4. No painel do projeto na Vercel, vá na aba **Storage** -> **Create Database** -> escolha **Neon (Serverless Postgres)** (plano gratuito) e conecte ao projeto.
-   - A Vercel vai injetar automaticamente a variável `DATABASE_URL` / `POSTGRES_URL`.
-5. Faça um **Redeploy** na aba **Deployments** e pronto!
-
-### Variáveis de ambiente opcionais
-
-- `DATABASE_URL` ou `POSTGRES_URL`: URL do PostgreSQL (obrigatória na Vercel; opcional localmente).
-- `ADMIN_USER`: login do painel admin (padrão: `infinitos`).
-- `ADMIN_PASS`: senha do painel admin (padrão: `senhadificil123`).
